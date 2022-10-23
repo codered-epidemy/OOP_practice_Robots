@@ -5,6 +5,8 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -33,6 +35,22 @@ public class MainApplicationFrame extends JFrame
 
         setContentPane(desktopPane);
 
+        LogWindow logWindow = createLogWindow();
+        addWindow(logWindow);
+
+        GameWindow gameWindow = new GameWindow();
+        gameWindow.setSize(400,  400);
+        addWindow(gameWindow);
+
+        setJMenuBar(generateMenuBar());
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
+
+        List<JInternalFrame> windows = new ArrayList<>();
+        windows.add(logWindow);
+        windows.add(gameWindow);
+
+        WindowsStateController.resetState(windows);
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -42,21 +60,11 @@ public class MainApplicationFrame extends JFrame
                         "Подтверждение закрытия",
                         JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    WindowsStateController.saveStates(windows);
+                    System.exit(0);
                 }
             }
         });
-        
-        
-        LogWindow logWindow = createLogWindow();
-        addWindow(logWindow);
-
-        GameWindow gameWindow = new GameWindow();
-        gameWindow.setSize(400,  400);
-        addWindow(gameWindow);
-
-        setJMenuBar(generateMenuBar());
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
     
     protected LogWindow createLogWindow()
