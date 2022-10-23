@@ -70,8 +70,13 @@ public class WindowsStateController {
                     } catch (PropertyVetoException e) {
                         e.printStackTrace();
                     }
+
                 }
+
             }
+
         }
+
     }
+
 }
